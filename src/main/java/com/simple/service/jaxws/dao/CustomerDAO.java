@@ -6,7 +6,9 @@ import java.util.ArrayList;
 
 public interface CustomerDAO {
 
-    public CustomerDTO getCustomer(Integer id);
+    CustomerDTO getCustomer(Integer id);
 
-    public ArrayList<CustomerDTO> getAllCustomers();
+    ArrayList<CustomerDTO> getAllCustomers();
+
+    String addCustomer(String firstName, String lastName, String email);
 }

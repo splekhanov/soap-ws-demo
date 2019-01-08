@@ -1,14 +1,26 @@
 package com.simple.service.jaxws.dto;
 
+import javax.validation.constraints.NotNull;
+import javax.xml.bind.annotation.*;
 import java.io.Serializable;
 
+@XmlRootElement(name = "CustomerDTO")
+@XmlAccessorType(XmlAccessType.FIELD)
 public class CustomerDTO implements Serializable {
 
     private static final long serialVersionUID = -5577579081118070434L;
 
+    @XmlElement(name = "CustomerId", required = true)
     private int id;
+
+    @XmlElement(name = "CustomerFirstName", required = true)
     private String firstName;
+
+    @XmlElement(name = "CustomerLastName", required = true)
     private String lastName;
+
+    @NotNull
+    @XmlElement(name = "CustomerEmail", required = true)
     private String email;
 
     public CustomerDTO() {

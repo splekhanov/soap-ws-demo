@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -25,6 +26,11 @@ public class CustomerDAOImpl implements CustomerDAO {
     @Override
     @Transactional(value = "transactionManager")
     public CustomerDTO getCustomer(Integer theId) {
+
+        if (theId == null) {
+            throw new ServiceException("Request has been rejected. CustomerId parameter is required");
+        }
+
         CustomerDTO customerDTO = null;
         Session currentSession = sessionFactory.getCurrentSession();
         Customer theCustomer = currentSession.get(Customer.class, theId);
@@ -47,8 +53,28 @@ public class CustomerDAOImpl implements CustomerDAO {
                         Customer.class);
 
         allCustomers = theQuery.getResultList();
+        if (allCustomers.size() == 0) {
+            throw new ServiceException("No users have been found");
+        }
         allCustomersDTO = allCustomers.stream().map(c -> new CustomerAssembler().entityToDTO(c)).collect(Collectors.toList());
         return new ArrayList<>(allCustomersDTO);
+    }
+
+    @Override
+    @Transactional(value = "transactionManager")
+    public String addCustomer(String firstName, String lastName, String email) {
+
+        Customer theCustomer = new Customer();
+
+        theCustomer.setFirstName(firstName);
+        theCustomer.setLastName(lastName);
+        theCustomer.setEmail(email);
+
+        Session currentSession = sessionFactory.getCurrentSession();
+        currentSession.saveOrUpdate(theCustomer);
+
+        Integer lastId = ((BigInteger) currentSession.createSQLQuery("SELECT LAST_INSERT_ID()").uniqueResult()).intValue();
+        return "New user has been added successfully. Obtained ID: " + lastId;
     }
 
 }
