@@ -12,4 +12,4 @@ CRUD application for training purposes.
 * Execute Maven: "clean install"
 * Add *war file from "target" into your "Tomcat/webapps" folder
 * Start Tomcat
-* 
+* WSDL is available here: http://localhost:8080/soap-ws-demo/services/CustomerService?wsdl
